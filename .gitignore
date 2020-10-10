@@ -129,4 +129,9 @@ dmypy.json
 .pyre/
 
 # outputs
-items.json
+*.json
+*.jl
+
+# IDEs
+.vscode
+.idea
