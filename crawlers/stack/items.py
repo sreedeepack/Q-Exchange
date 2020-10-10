@@ -6,10 +6,19 @@
 import scrapy
 from scrapy.item import Item, Field
 
+
 class StackItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    #pass
+    """For stackoverflow"""
     title = Field()
     url = Field()
+    votes = Field()
+    views = Field()
+    answers = Field()
+    tags = Field()
+    date = Field()
 
+
+class UbuntuItem(scrapy.Item):
+    """For AskUbuntu"""
+    name = scrapy.Field()
+    pass
