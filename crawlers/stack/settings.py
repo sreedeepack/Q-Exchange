@@ -12,15 +12,17 @@ BOT_NAME = 'stack'
 SPIDER_MODULES = ['stack.spiders']
 NEWSPIDER_MODULE = 'stack.spiders'
 
+# Number of pages to crawl
+STACK_PAGE_LIMIT = 50
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'stack (+http://www.yourdomain.com)'
+# USER_AGENT = 'stack (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay

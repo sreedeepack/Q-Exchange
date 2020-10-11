@@ -7,21 +7,29 @@ from stack.items import StackItem
 class StackSpider(Spider):
     name = "stack"
     allowed_domains = ["stackoverflow.com", "stackexchange.com", "askubuntu.com"]
-    start_urls = [
-        "http://stackoverflow.com/questions?pagesize=50&sort=frequent",
-        # "http://math.stackexchange.com/questions?pagesize=50&sort=frequent",
-        # "https://chemistry.stackexchange.com/questions?pagesize=50&sort=frequent",
-        # "http://askubuntu.com/questions?pagesize=50&sort=frequent",
-    ]
 
-    def parse(self, response):
-        # parse 50 pages
-        # //TODO change fixed value to something that can be changed
-        next_urls = [f'{response.url} + &page={i}' for i in range(1, 50)]
+    def __init__(self, start_urls=None, pages=50, **kwargs):
+        super().__init__(**kwargs)
+        self.pages = pages
+        self.start_urls = start_urls
+        if start_urls is None:
+            self.start_urls = [
+                "http://stackoverflow.com/questions?pagesize=50&sort=frequent",
+                "http://math.stackexchange.com/questions?pagesize=50&sort=frequent",
+                "https://chemistry.stackexchange.com/questions?pagesize=50&sort=frequent",
+                "http://askubuntu.com/questions?pagesize=50&sort=frequent",
+            ]
+
+    def parse(self, response, **kwargs):
+        next_urls = [f'{response.url} + &page={i}' for i in range(1, self.pages + 1)]
         for next_url in next_urls:
             yield Request(next_url, callback=self.parse_stack)
 
     def parse_stack(self, response):
+        """
+
+        @rtype: object
+        """
         questions = Selector(response).xpath('//div[@class="question-summary"]')
 
         for question in questions:
