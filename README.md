@@ -16,3 +16,15 @@ pip install -r requirements.txt
 `scrapy crawl stack`
     - To render output to a json file
     `scrapy crawl stack -o items.json -t json`
+
+### Pausing and Resuming Crawls
+To enable persistence support you just need to define a job directory through the JOBDIR setting. This directory will be for storing all required data to keep the state of a single job (i.e. a spider run). It’s important to note that this directory must not be shared by different spiders, or even different jobs/runs of the same spider, as it’s meant to be used for storing the state of a single job.
+    
+#### How to use it
+To start a spider with persistence support enabled, run it like this:
+
+`scrapy crawl stack -s JOBDIR=crawls/stack-1`
+
+Then, you can stop the spider safely at any time (by pressing Ctrl-C or sending a signal), and resume it later by issuing the same command:
+
+`scrapy crawl stack -s JOBDIR=crawls/stack-1`
