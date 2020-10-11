@@ -4,7 +4,7 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-from scrapy.item import Item, Field
+from scrapy.item import Field
 
 
 class StackItem(scrapy.Item):
@@ -16,6 +16,7 @@ class StackItem(scrapy.Item):
     answers = Field()
     tags = Field()
     date = Field()
+    src = Field()
 
 
 class UbuntuItem(scrapy.Item):
