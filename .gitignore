@@ -133,5 +133,5 @@ dmypy.json
 *.jl
 
 # IDEs
-.vscode
-.idea
+.vscode/
+.idea/
