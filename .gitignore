@@ -135,4 +135,5 @@ dmypy.json
 # IDEs
 .vscode/
 .vscode/settings.json
+/.vscode/
 .idea/
