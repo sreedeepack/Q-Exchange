@@ -17,6 +17,8 @@ pip install -r requirements.txt
     - To render output to a json file
     `scrapy crawl stack -o items.json -t json`
 
+- You can also run crawlers/main.py if you're on Windows or if you're running it from an IDE.
+
 ### Pausing and Resuming Crawls
 To enable persistence support you just need to define a job directory through the JOBDIR setting. This directory will be for storing all required data to keep the state of a single job (i.e. a spider run). It’s important to note that this directory must not be shared by different spiders, or even different jobs/runs of the same spider, as it’s meant to be used for storing the state of a single job.
     

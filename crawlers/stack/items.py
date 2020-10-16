@@ -8,8 +8,9 @@ from scrapy.item import Field
 
 
 class StackItem(scrapy.Item):
-    """For stackoverflow"""
+    """For stackoverflow and other stack-exchange websites"""
     title = Field()
+    desc = Field()
     url = Field()
     votes = Field()
     views = Field()
@@ -17,9 +18,3 @@ class StackItem(scrapy.Item):
     tags = Field()
     date = Field()
     src = Field()
-
-
-class UbuntuItem(scrapy.Item):
-    """For AskUbuntu"""
-    name = scrapy.Field()
-    pass
