@@ -18,3 +18,15 @@ class StackItem(scrapy.Item):
     tags = Field()
     date = Field()
     src = Field()
+
+
+class RedditItem(scrapy.Item):
+    """For reddit communities"""
+    title = Field()
+    date = Field()
+    url = Field()
+    src = Field()
+    # votes = ups
+    votes = Field()
+    # num_comments
+    comments = Field()
