@@ -1,7 +1,7 @@
 from scrapy.crawler import CrawlerProcess
 
-from spiders.reddit import RedditSpider
-from spiders.stack_all import SOSpider, UnixSpider, OtherSESpider
+from stack.spiders.reddit import RedditSpider
+from stack.spiders.stack_all import SOSpider, UnixSpider, OtherSESpider
 
 # run spider on cmd
 # cmdline.execute("scrapy crawl stack".split())
