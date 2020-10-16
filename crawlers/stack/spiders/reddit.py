@@ -3,6 +3,7 @@ from datetime import datetime
 
 import scrapy
 from scrapy import Request
+
 from stack.items import RedditItem
 
 
@@ -16,8 +17,17 @@ class RedditSpider(scrapy.Spider):
     start_urls = [f"https://www.reddit.com/r/{subreddit}/top.json?sort=top&t=all" for subreddit in subreddits]
 
     # TODO get from settings/config file
-    max_pages = 5
+    max_pages = 10
     curr_page = 0
+
+    custom_settings = {
+        'FEED_URI': f'{name}_' + str(datetime.today()) + '.json',
+        'FEED_FORMAT': 'json',
+        'FEED_EXPORTERS': {
+            'json': 'scrapy.exporters.JsonItemExporter',
+        },
+        'FEED_EXPORT_ENCODING': 'utf-8',
+    }
 
     def parse(self, response, **kwargs):
         jsonresponse = json.loads(response.text)
