@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'stack.spiders'
 STACK_PAGE_LIMIT = 50
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-# USER_AGENT = 'stack (+http://www.yourdomain.com)'
+USER_AGENT = 'stack-crawler'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
