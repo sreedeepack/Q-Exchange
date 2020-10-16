@@ -5,6 +5,7 @@
 
 
 import json
+from uuid import uuid4
 
 import pymongo
 # useful for handling different item types with a single interface
@@ -21,7 +22,7 @@ class StackPipeline:
 class JsonWriterPipeline:
 
     def open_spider(self, spider):
-        self.file = open('items.jl', 'w')
+        self.file = open(f'{uuid4()}_items.jl', "a")
 
     def close_spider(self, spider):
         self.file.close()
