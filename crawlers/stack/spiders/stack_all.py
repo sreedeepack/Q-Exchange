@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from settings import OTHER_STACK_PAGES, STACKOVERFLOW_PAGES
+from stack.settings import OTHER_STACK_PAGES, STACKOVERFLOW_PAGES
 from .stack_base import StackSpider
 
 base_url = ("http://", ".com/questions?pagesize=50&sort=frequent")

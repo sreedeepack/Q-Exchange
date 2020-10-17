@@ -3,8 +3,8 @@ from datetime import datetime
 from scrapy import Spider, Request
 from scrapy.selector import Selector
 
-from settings import STACK_DEEP_CRAWL, OTHER_STACK_PAGES
 from stack.items import StackItem
+from stack.settings import OTHER_STACK_PAGES, STACK_DEEP_CRAWL
 
 
 class StackSpider(Spider):
