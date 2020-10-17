@@ -1,14 +1,26 @@
+from datetime import datetime
+
 from scrapy import Spider, Request
 from scrapy.selector import Selector
 
 from stack.items import StackItem
+from stack.settings import OTHER_STACK_PAGES, STACK_DEEP_CRAWL
 
 
 class StackSpider(Spider):
     name = "stack"
     allowed_domains = ["stackoverflow.com", "stackexchange.com", "askubuntu.com"]
+    # jsonlines writer - for persisting data as files - use instead of pipeline writer
+    custom_settings = {
+        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jl',
+        'FEED_FORMAT': 'jsonlines',
+        'FEED_EXPORTERS': {
+            'jsonlines': 'scrapy.exporters.JsonLinesItemExporter',
+        },
+        'FEED_EXPORT_ENCODING': 'utf-8',
+    }
 
-    def __init__(self, start_urls=None, pages=50, **kwargs):
+    def __init__(self, start_urls=None, pages=OTHER_STACK_PAGES, **kwargs):
         super().__init__(**kwargs)
         self.pages = pages
         self.start_urls = start_urls
@@ -49,14 +61,18 @@ class StackSpider(Spider):
                 # Posts can become community owned and hence post date is removed
                 item['date'] = 'NA'
 
-            # Fetch question description from link to question
-            request = Request(item['url'], callback=self.parse_answer_page)
-            request.meta['item'] = item
-            request.meta['link'] = item['src']
-            request.meta['new_link'] = item['url']
-            # generator for requests, the callback function parse_answer_page
-            # will return the actual item
-            yield request
+            if STACK_DEEP_CRAWL:
+                # Fetch question description from link to question
+                request = Request(item['url'], callback=self.parse_answer_page)
+                request.meta['item'] = item
+                request.meta['link'] = item['src']
+                request.meta['new_link'] = item['url']
+                # generator for requests, the callback function parse_answer_page
+                # will return the actual item
+                yield request
+            else:
+                item['desc'] = question.css('.excerpt').xpath('.//text()').extract()[0]
+                yield item
 
     def parse_answer_page(self, response):
         """
