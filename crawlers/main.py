@@ -7,6 +7,7 @@ from stack.spiders.stack_all import SOSpider, UnixSpider, OtherSESpider
 # cmdline.execute("scrapy crawl stack".split())
 # cmdline.execute("scrapy crawl reddit".split())
 
+# Run all spiders
 process = CrawlerProcess()
 process.crawl(RedditSpider)
 process.crawl(SOSpider)
