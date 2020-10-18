@@ -42,3 +42,8 @@ Then, you can stop the spider safely at any time (by pressing Ctrl-C or sending 
 
 `scrapy crawl stack -s JOBDIR=crawls/stack-1`
 
+### For Solr
+
+![alt text](screenshots/add_docs_from_terminal.png?raw=true)
+![alt text](screenshots/add_docs_from_ui.png?raw=true)
+![alt text](screenshots/query_index.png?raw=true)
