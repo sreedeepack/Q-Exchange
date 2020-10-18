@@ -1,0 +1,118 @@
+from functools import reduce
+
+import nltk
+
+
+class Preprocessor(object):
+    """
+    Cleans, removes stopwords and tokenizes lines
+    """
+
+    def __init__(self):
+        # Stopwords
+        nltk.download('stopwords', quiet=True, raise_on_error=True)
+        # Sentence Tokenizer
+        nltk.download('punkt', quiet=True, raise_on_error=True)
+
+        self._tokenized_stop_words = nltk.word_tokenize(' '.join(nltk.corpus.stopwords.words('english')))
+        self._stop_words = set(nltk.corpus.stopwords.words('english'))
+
+        # Porter stemmer
+        self.stemmer = nltk.stem.PorterStemmer()
+
+    def stem_word(self, word):
+        return self.stemmer.stem(word)
+
+    def tokenize_string(self, line):
+        tokens = nltk.word_tokenize(line)
+        tokens = (self.stem_word(token) for token in tokens)
+        tokens = [token for token in tokens if token.isalnum()]
+        return list(tokens)
+
+    @staticmethod
+    def word_split(text):
+        """
+        Split a text in words. Returns a list of tuple that contains
+        (word, location) location is the starting byte position of the word.
+        """
+        word_list = []
+        w_current = []
+        w_index = None
+
+        for i, c in enumerate(text):
+            if c.isalnum():
+                w_current.append(c)
+                w_index = i
+            elif w_current:
+                word = u''.join(w_current)
+                word_list.append((w_index - len(word) + 1, word))
+                w_current = []
+
+        if w_current:
+            word = u''.join(w_current)
+            word_list.append((w_index - len(word) + 1, word))
+
+        return word_list
+
+    def words_cleanup(self, words):
+        """
+        Stems words and removes
+        words with length less then a minimum and stopwords.
+        """
+        cleaned_words = []
+        for index, word in words:
+
+            if len(word) < 3 or word in self._stop_words or word in self._tokenized_stop_words:
+                continue
+            word = self.stem_word(word)
+            cleaned_words.append((index, word))
+        return cleaned_words
+
+    def word_index(self, text):
+        """
+        Just a helper method to process a text.
+        It calls word split, normalize and cleanup.
+        """
+        words = self.word_split(text)
+        words = self.words_cleanup(words)
+
+        return words
+
+
+class Indexer(object):
+
+    def __init__(self, preprocessor):
+        self.preprocessor = preprocessor
+
+    def inverted_index(self, text):
+        """
+        Create an Inverted-Index of the specified text document.
+            {word:[locations]}
+        """
+        inverted = {}
+        for index, word in self.preprocessor.word_index(text):
+            locations = inverted.setdefault(word, [])
+            locations.append(index)
+
+        return inverted
+
+    @staticmethod
+    def inverted_index_add(inverted, doc_id, doc_index):
+        """
+        Add Inverted-Index doc_index of the document doc_id to the
+        Multi-Document Inverted-Index (inverted),
+        using doc_id as document identifier.
+            {word:{doc_id:[locations]}}
+        """
+        for word, locations in doc_index.items():
+            indices = inverted.setdefault(word, {})
+            indices[doc_id] = locations
+        return inverted
+
+    def search(self, inverted, query):
+        """
+        Returns a set of documents id that contains all the words in your query.
+        """
+        words = [word for _, word in self.preprocessor.word_index(query) if word in inverted]
+        results = [set(inverted[word].keys()) for word in words]
+        return reduce(lambda x, y: x & y, results) if results else []
