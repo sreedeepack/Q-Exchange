@@ -1,2 +1,6 @@
 scrapy
 pymongo
+pandas
+nltk
+sklearn
+jsonlines
