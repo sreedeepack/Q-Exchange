@@ -62,7 +62,8 @@ class Preprocessor(object):
         cleaned_words = []
         for index, word in words:
 
-            if len(word) < 3 or word in self._stop_words or word in self._tokenized_stop_words:
+            if len(word) < 3 or word in self._stop_words or word in self._tokenized_stop_words or not str(
+                    word).isalnum():
                 continue
             word = self.stem_word(word)
             cleaned_words.append((index, word))
@@ -77,6 +78,34 @@ class Preprocessor(object):
         words = self.words_cleanup(words)
 
         return words
+
+    def remove_stopwords(self, text) -> str:
+        '''this function will remove stopwords from text '''
+        final_text = ''
+        for word in text.split():
+            if word not in self._stop_words:
+                final_text += word + ' '
+        return final_text
+
+    def clean_str(self, text, stopwords=True) -> str:
+        import re
+        text = (text.encode('ascii', 'ignore')).decode("utf-8")
+        text = re.sub("&.*?;", "", text)
+        text = re.sub("[\]\|\[\@\,\$\%\*\&\\\(\)\":]", "", text)
+        text = re.sub("-", " ", text)
+        text = re.sub("\.+", "", text)
+        text = re.sub("^\s+", "", text)
+        text = re.sub("\.+", "", text)
+
+        text = re.sub("[_]{2,}", "", text)
+        text = re.sub("[/]", " ", text)
+        text = re.sub("[0-9\n\t?!]", " ", text)
+        text = re.sub("[ ]{2,}", "", text)
+
+        text = text.lower()
+        if stopwords:
+            text = self.remove_stopwords(text)
+        return text
 
 
 class Indexer(object):
