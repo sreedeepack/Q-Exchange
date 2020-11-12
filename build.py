@@ -87,7 +87,7 @@ class BuildModel(object):
         self.get_tfidf()
 
         if os.path.exists("tfidf.pkl"):
-            pkl_file = open("tfidf.pkl")
+            pkl_file = open("tfidf.pkl", "rb")
             self.tfidf_w2v_vectors_gensim = pickle.load(pkl_file)
         else:
             for sentence in tqdm(sentences):  # for each sentence
@@ -109,7 +109,7 @@ class BuildModel(object):
                 self.tfidf_w2v_vectors_gensim.append(vector)
 
             # Store
-            pkl_file = open("tfidf.pkl")
+            pkl_file = open("tfidf.pkl", "wb")
             pickle.dump(self.tfidf_w2v_vectors_gensim, pkl_file)
 
         pkl_file.close()
