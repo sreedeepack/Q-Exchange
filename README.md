@@ -42,6 +42,13 @@ Then, you can stop the spider safely at any time (by pressing Ctrl-C or sending 
 
 `scrapy crawl stack -s JOBDIR=crawls/stack-1`
 
+### Searching
+
+Run ```query.py```
+    
+    $ chmod +x query.py
+    $ ./query.py
+
 ### For Solr
 
 ![alt text](screenshots/add_docs_from_terminal.png?raw=true)
