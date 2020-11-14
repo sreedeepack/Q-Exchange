@@ -1,10 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import axios from 'axios';
-import logo_grad_bg from './images/logo_grad_bg.png';
-import logo_white_bg from './images/logo_white_bg.png';
-import {Card, Badge} from 'react-bootstrap';
+import {Badge, Card} from 'react-bootstrap';
 
 function App() {
 
@@ -19,7 +16,7 @@ function App() {
     if(query.length > 0){
       setSubmitted(true)
       try{
-        axios.get('http://127.0.0.1:5000/getsearchresults', {
+        axios.get('http://127.0.0.1:5000/search', {
           params: {
             "query": query,
             "num_results": num_results
@@ -71,9 +68,10 @@ function App() {
               <h3 className="text-center">{result.votes}</h3>
               </div>
               <div className="col-12 col-md-10">
-              <h1>{result.title}</h1>
-              <p dangerouslySetInnerHTML={{ __html: result.body }}></p>
-               <h4>Similarity Score: <span style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.similarity_score}</span></h4>
+                <h1>{result.title}</h1>
+                <p dangerouslySetInnerHTML={{__html: result.body}}/>
+                <h4>Similarity Score: <span
+                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.similarity_score}</span></h4>
               </div>
             </div>
           </div>
@@ -83,17 +81,19 @@ function App() {
 
   return (
     <div>
-      <div className="container">
-      <Card className={submitted?'maincard':'inviscard'} style={{'margin-top':submitted?'10%':'30%'}}>
+      <div className="container text-center">
+        <Card className={submitted ? 'maincard' : 'inviscard'} style={{'margin-top': submitted ? '10%' : '30%'}}>
           <Card.Body>
-      <div class="form-group has-feedback" className="inputfieldcontainer">
-      <h1 className="num_results_h1" style={{color: submitted? '#464646': 'white', fontSize:"25px"}}>Q-EXCHANGE </h1> 
+            <div class="form-group has-feedback" className="inputfieldcontainer">
+              <h1 className="num_results_h1"
+                  style={{color: submitted ? '#464646' : 'white', fontSize: "25px"}}> Q-EXCHANGE </h1>
 
-          <input type="text" class="form-control inputfield" value={query} placeholder="Search Query" onChange={(e) => setQuery(e.target.value)} />
-          <i class="fas fa-search search_icon"></i>
-     
-        <div className="row" style={{marginTop: '10px'}}>
-        <div className="col-md-6">
+              <input type="text" class="form-control inputfield" value={query} placeholder="Search Query"
+                     onChange={(e) => setQuery(e.target.value)}/>
+              <i class="fas fa-search search_icon"></i>
+
+              <div className="row" style={{marginTop: '10px'}}>
+                <div className="col-md-6">
           </div>
           <div className="col-12 col-md-6">
             <div className="row">

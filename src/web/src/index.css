@@ -65,7 +65,8 @@ body{
   padding: 30px;
   border-radius: 20px;
   background-color: transparent;
-  transition: all 100ms;
+  transition: all 500ms;
+  margin: auto;
 }
 
 .maincard{
