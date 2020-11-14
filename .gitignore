@@ -137,3 +137,7 @@ dmypy.json
 .vscode/settings.json
 /.vscode/
 .idea/
+
+# React and Node
+node_modules/
+package-lock.json

@@ -4,5 +4,8 @@ pandas
 nltk
 sklearn
 jsonlines
+flask
+flask-cors
+
 tqdm
 gensim
