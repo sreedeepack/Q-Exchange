@@ -11,7 +11,7 @@ from build import BuildModel
 
 class Query:
 
-    def __init__(self, file="crawlers/stack/data/solr.jsonl"):
+    def __init__(self, file="../../crawlers/stack/data/solr.jsonl"):
         self.model = BuildModel(file)
         self.model.build()
         self.df = pd.DataFrame(self.model.document_generator(file, type="document"))
@@ -66,15 +66,18 @@ class Query:
 
         print(f'Top{top_n} cosine similarities are \t', similarities[0][top_similarity_index])
 
-        results = self.df[['title', 'url']][top_similarity_index]
+        results = self.df[top_similarity_index]
 
+        similarity_score = pd.Series(similarities[0][top_similarity_index])
+        results['similarity_score'] = similarity_score.values
         total_time = (time.time() - start)
         print(f'Time taken = {total_time} ms')
-        return results
+
+        return results.to_dict(orient="records")
 
 
 if __name__ == "__main__":
-    q = Query("crawlers/stack/data/solr.jsonl")
+    q = Query("../../crawlers/stack/data/solr.jsonl")
     inp = ""
     while True:
         inp = input("Enter query...or type 'exit':\n")

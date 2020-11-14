@@ -14,7 +14,7 @@ from indexing import Preprocessor
 
 class BuildModel(object):
 
-    def __init__(self, file="crawlers/stack/data/solr.jsonl"):
+    def __init__(self, file="../../crawlers/stack/data/solr.jsonl"):
         # input jsonlines file
         self.file = file
         # inverted index
@@ -42,7 +42,12 @@ class BuildModel(object):
                     'doc_id': doc_id,
                     'url': obj['url'],
                     'title': preprocessor.clean_str(obj['title'], use_stopwords),
-                    'desc': preprocessor.clean_str(obj['desc'], use_stopwords)
+                    'body': preprocessor.clean_str(obj['desc'], use_stopwords),
+                    'votes': obj['votes'],
+                    'date': obj['date'],
+                    'answers': obj['answers'],
+                    'src': obj['src'],
+                    'tags': ", ".join(obj['tags']),
                 }
                 if type == "document":
                     yield item
@@ -78,8 +83,11 @@ class BuildModel(object):
 
     def gensim_vec(self):
         sentences = list(self.document_generator(self.file, type="word_list"))
-        w2v_model = Word2Vec(sentences=sentences, size=100, window=5, min_count=5, workers=-1)
-        w2v_model.save("word2vec.model")
+        if os.path.exists("word2vec.model"):
+            w2v_model = Word2Vec.load("word2vec.model")
+        else:
+            w2v_model = Word2Vec(sentences=sentences, size=100, window=5, min_count=5, workers=-1)
+            w2v_model.save("word2vec.model")
 
         self.w2v_words = list(w2v_model.wv.vocab)
         self.w2v_model = w2v_model
