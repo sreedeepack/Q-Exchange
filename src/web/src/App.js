@@ -8,7 +8,7 @@ function App() {
   const [submitted, setSubmitted] = useState(false);
   const [query, setQuery] = useState('');
   const [resultReturned, setResultReturned] = useState(true);
-  const [num_results, setNum_results] = useState('5');
+  const [num_results, setNum_results] = useState('10');
   const [searchresults, setSearchResults] = useState([]);
   const [tags, setTags] = useState([]);
 
@@ -90,7 +90,7 @@ function App() {
 
               <input type="text" class="form-control inputfield" value={query} placeholder="Search Query"
                      onChange={(e) => setQuery(e.target.value)}/>
-              <i class="fas fa-search search_icon"></i>
+              <i class="fas fa-search search_icon"/>
 
               <div className="row" style={{marginTop: '10px'}}>
                 <div className="col-md-6">
