@@ -66,8 +66,16 @@ class Query:
 
         print(f'Top{top_n} cosine similarities are \t', similarities[0][top_similarity_index])
 
-        results = self.df[top_similarity_index]
+        results = self.df.iloc[top_similarity_index]
 
+        # shortening body
+        def extract_text(string, position=0):
+            if len(string) < 250:
+                return string
+            return string[position:position + 250].replace("\n", '...') + "..."
+
+        results['body'] = results['body'].apply(lambda s: extract_text(s))
+        # add similarities to dataframe
         similarity_score = pd.Series(similarities[0][top_similarity_index])
         results['similarity_score'] = similarity_score.values
         total_time = (time.time() - start)

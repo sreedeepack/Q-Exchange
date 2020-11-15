@@ -52,9 +52,9 @@ class BuildModel(object):
                 if type == "document":
                     yield item
                 elif type == "word_list":
-                    yield (item['title'] + " " + item['desc']).split(" ")
+                    yield (item['title'] + " " + item['body']).split(" ")
                 elif type == "string":
-                    yield item['title'] + " " + item['desc']
+                    yield item['title'] + " " + item['body']
 
     # fullIndex
     def get_index(self):
@@ -64,7 +64,7 @@ class BuildModel(object):
         for doc in self.document_generator(self.file):
             doc_id = doc['doc_id']
             # index both title and description
-            text = doc['title'] + " " + doc['desc']
+            text = doc['title'] + " " + doc['body']
             # self.doc_map[doc_id] = (doc['url'], text)
             self.doc_ids[doc_id] = doc['url']
             doc_index = indexer.inverted_index(text)
@@ -124,5 +124,5 @@ class BuildModel(object):
 
     def build(self):
 
-        self.index = self.get_index()
+        # self.index = self.get_index()
         self.gensim_vec()

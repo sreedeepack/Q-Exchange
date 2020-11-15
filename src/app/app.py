@@ -19,11 +19,11 @@ def search():
         params = request.args
 
     inp_query = params['query']
-    num_results = params['num_results']
+    num_results = int(params['num_results'])
     # TODO predict tags?
-    tags = ""
+    tags = ["hello" * 10]
     result = query_obj.search(inp_query, num_results)
-
+    print(result)
     return jsonify({'tags': tags, 'results': result})
 
 

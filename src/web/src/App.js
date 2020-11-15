@@ -23,7 +23,7 @@ function App() {
           }
         })
         .then((response) => {
-            setTags(response.data.tags[0])
+            // setTags(response.data.tags[0])
             setSearchResults(response.data.results)
         });
       }
@@ -81,7 +81,7 @@ function App() {
 
   return (
     <div>
-      <div className="container text-center">
+      <div className="container">
         <Card className={submitted ? 'maincard' : 'inviscard'} style={{'margin-top': submitted ? '10%' : '30%'}}>
           <Card.Body>
             <div class="form-group has-feedback" className="inputfieldcontainer">
