@@ -1,6 +1,8 @@
+import re
 from functools import reduce
 
 import nltk
+import spacy
 
 
 class Preprocessor(object):
@@ -19,6 +21,10 @@ class Preprocessor(object):
 
         # Porter stemmer
         self.stemmer = nltk.stem.PorterStemmer()
+
+        # spacy
+        # python -m spacy download en_core_web_sm
+        self.EN = spacy.load('en_core_web_sm')
 
     def stem_word(self, word):
         return self.stemmer.stem(word)
@@ -97,15 +103,59 @@ class Preprocessor(object):
         text = re.sub("^\s+", "", text)
         text = re.sub("\.+", "", text)
 
-        text = re.sub("[_]{2,}", "", text)
+        # text = re.sub("[_]{2,}", "", text)
         text = re.sub("[/]", " ", text)
-        text = re.sub("[0-9\n\t?!]", " ", text)
+        # text = re.sub("[0-9\n\t?!]", " ", text)
         text = re.sub("[ ]{2,}", "", text)
 
         text = text.lower()
         if stopwords:
             text = self.remove_stopwords(text)
         return text
+
+    # ###########################################################################
+
+    @staticmethod
+    def to_lowercase(words):
+        """Convert all characters to lowercase from list of tokenized words"""
+        new_words = []
+        for word in words:
+            new_word = word.lower()
+            new_words.append(new_word)
+        return new_words
+
+    @staticmethod
+    def remove_punctuation(words):
+        """Remove punctuation from list of tokenized words"""
+        new_words = []
+        for word in words:
+            new_word = re.sub(r'[^\w\s]', '', word)
+            if new_word != '':
+                new_words.append(new_word)
+        return new_words
+
+    def remove_stopwords_2(self, words):
+        """Remove stop words from list of tokenized words"""
+        new_words = []
+        for word in words:
+            if word not in self._stop_words:
+                new_words.append(word)
+        return new_words
+
+    def normalize(self, words, stopwords):
+        words = self.to_lowercase(words)
+        words = self.remove_punctuation(words)
+        if stopwords:
+            words = self.remove_stopwords_2(words)
+        return words
+
+    def tokenize_text(self, text):
+        """Apply tokenization using spacy to docstrings."""
+        tokens = self.EN.tokenizer(text)
+        return [token.text.lower() for token in tokens if not token.is_space]
+
+    def preprocess_text(self, text, stopwords=True) -> str:
+        return ' '.join(self.normalize(self.tokenize_text(text), stopwords))
 
 
 class Indexer(object):

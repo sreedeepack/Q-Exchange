@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
+import pickle
 import time
 from functools import reduce
 
 import numpy as np
 import pandas as pd
+from keras_preprocessing.sequence import pad_sequences
 from sklearn.metrics.pairwise import cosine_similarity
+from tensorflow.python.keras.models import load_model
 
 from build import BuildModel
 
@@ -15,6 +18,12 @@ class Query:
         self.model = BuildModel(file)
         self.model.build()
         self.df = pd.DataFrame(self.model.document_generator(file, type="document"))
+        self.tag_encoder = self.model.tag_encoder()
+
+        with open('tokenizer.pickle', 'rb') as handle:
+            self.tokenizer = pickle.load(handle)
+
+        self.tag_model = load_model('tag_predictor.h5')
 
     def search_index(self, query):
         """
@@ -35,7 +44,7 @@ class Query:
         dictionary = self.model.dictionary
 
         # same as size given in Word2Vec in build.py
-        main_vec = np.zeros(100)
+        main_vec = np.zeros(300)
         # initialize tfidf weight
         weight_sum = 0
 
@@ -68,6 +77,10 @@ class Query:
 
         results = self.df.iloc[top_similarity_index]
 
+        # add similarities to dataframe
+        similarity_score = pd.Series(similarities[0][top_similarity_index])
+        results['similarity_score'] = similarity_score.values
+
         # shortening body
         def extract_text(string, position=0):
             if len(string) < 250:
@@ -75,13 +88,24 @@ class Query:
             return string[position:position + 250].replace("\n", '...') + "..."
 
         results['body'] = results['body'].apply(lambda s: extract_text(s))
-        # add similarities to dataframe
-        similarity_score = pd.Series(similarities[0][top_similarity_index])
-        results['similarity_score'] = similarity_score.values
+
         total_time = (time.time() - start)
         print(f'Time taken = {total_time} ms')
 
         return results.to_dict(orient="records")
+
+    def predict_tags(self, text):
+        # Tokenize text
+        x_test = pad_sequences(self.tokenizer.texts_to_sequences([text]), maxlen=300)
+        # Predict
+        prediction = self.tag_model.predict([x_test])[0]
+        for i, value in enumerate(prediction):
+            if value > 0.5:
+                prediction[i] = 1
+            else:
+                prediction[i] = 0
+        tags = self.tag_encoder.inverse_transform(np.array([prediction]))
+        return tags
 
 
 if __name__ == "__main__":

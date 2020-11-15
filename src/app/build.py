@@ -4,8 +4,10 @@ import pickle
 
 import jsonlines
 import numpy as np
+import pandas as pd
 from gensim.models import Word2Vec
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm import tqdm
 
 from indexing import Indexer
@@ -29,6 +31,7 @@ class BuildModel(object):
 
         self.w2v_words = None
         self.w2v_model = None
+        self.data = None
 
     def document_generator(self, file, type="document"):
         preprocessor = self.preprocessor
@@ -41,8 +44,9 @@ class BuildModel(object):
                 item = {
                     'doc_id': doc_id,
                     'url': obj['url'],
-                    'title': preprocessor.clean_str(obj['title'], use_stopwords),
-                    'body': preprocessor.clean_str(obj['desc'], use_stopwords),
+                    'title': obj['title'],
+                    'processed_title': preprocessor.preprocess_text(obj['title'], use_stopwords),
+                    'body': preprocessor.preprocess_text(obj['desc'], use_stopwords),
                     'votes': obj['votes'],
                     'date': obj['date'],
                     'answers': obj['answers'],
@@ -52,9 +56,9 @@ class BuildModel(object):
                 if type == "document":
                     yield item
                 elif type == "word_list":
-                    yield (item['title'] + " " + item['body']).split(" ")
+                    yield (item['processed_title'] + " " + item['body']).split(" ")
                 elif type == "string":
-                    yield item['title'] + " " + item['body']
+                    yield item['processed_title'] + " " + item['body']
 
     # fullIndex
     def get_index(self):
@@ -82,11 +86,22 @@ class BuildModel(object):
         self.dictionary = dict(zip(tfidf.get_feature_names(), list(tfidf.idf_)))
 
     def gensim_vec(self):
-        sentences = list(self.document_generator(self.file, type="word_list"))
+        print("Generating word2vec model...")
+
+        # sentences = list(self.document_generator(self.file, type="word_list"))
+        data = pd.DataFrame(self.document_generator(self.file, type="document"))
+        data["text"] = data['title'] + " " + data['body']
+        sentences = [_text.split() for _text in np.array(data.text)]
         if os.path.exists("word2vec.model"):
             w2v_model = Word2Vec.load("word2vec.model")
         else:
-            w2v_model = Word2Vec(sentences=sentences, size=100, window=5, min_count=5, workers=-1)
+
+            w2v_model = Word2Vec(size=300, window=7, min_count=10, workers=-1)
+            # w2v_model = Word2Vec(sentences=sentences, size=300, window=7, min_count=10, workers=-1)
+
+            # Train Word Embeddings
+            w2v_model.train(sentences, total_examples=len(sentences), epochs=32)
+            # w2v_model.train(sentences, total_examples=len(sentences), epochs=32)
             w2v_model.save("word2vec.model")
 
         self.w2v_words = list(w2v_model.wv.vocab)
@@ -94,15 +109,16 @@ class BuildModel(object):
         # get tfidf words and dictionary
         self.get_tfidf()
 
+        print("Generating tfidf...")
         if os.path.exists("tfidf.pkl"):
             pkl_file = open("tfidf.pkl", "rb")
             self.tfidf_w2v_vectors_gensim = pickle.load(pkl_file)
         else:
-            for sentence in tqdm(sentences):  # for each sentence
-                vector = np.zeros(100)  # as word vectors length is 100
+            for sentence in tqdm(sentences):
+                vector = np.zeros(300)  # as word vectors size is 300
                 # num of words with a valid vector in the sentence
                 tf_idf_weight = 0
-                for word in sentence:  # for each word in a review/sentence
+                for word in sentence:
                     if (word in self.w2v_words) and (word in self.tfidf_words):
                         # getting the vector for each word
                         vec = w2v_model.wv[word]
@@ -121,6 +137,33 @@ class BuildModel(object):
             pickle.dump(self.tfidf_w2v_vectors_gensim, pkl_file)
 
         pkl_file.close()
+        self.data = data
+
+    def tag_encoder(self):
+        self.data.tags = self.data.tags.apply(lambda x: x.split('|'))
+        tag_freq_dict = {}
+        for tags in self.data.tags:
+            for tag in tags:
+                if tag not in tag_freq_dict:
+                    tag_freq_dict[tag] = 0
+                else:
+                    tag_freq_dict[tag] += 1
+
+        tags_to_use = 500
+        tag_freq_dict_sorted = dict(sorted(tag_freq_dict.items(), key=lambda x: x[1], reverse=True))
+        final_tags = list(tag_freq_dict_sorted.keys())[:tags_to_use]
+
+        final_tag_data = []
+        for tags in self.data.tags:
+            temp = []
+            for tag in tags:
+                if tag in final_tags:
+                    temp.append(tag)
+            final_tag_data.append(temp)
+
+        tag_encoder = MultiLabelBinarizer()
+        tags_encoded = tag_encoder.fit_transform(final_tag_data)
+        return tag_encoder
 
     def build(self):
 

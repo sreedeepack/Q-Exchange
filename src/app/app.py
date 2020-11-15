@@ -20,11 +20,19 @@ def search():
 
     inp_query = params['query']
     num_results = int(params['num_results'])
-    # TODO predict tags?
-    tags = ["hello" * 10]
+
     result = query_obj.search(inp_query, num_results)
-    print(result)
+    tags = list(query_obj.predict_tags(inp_query))
+
     return jsonify({'tags': tags, 'results': result})
+
+
+@app.route('/')
+def home():
+    return jsonify({
+        "msg": "Nothing here",
+        "goto": "/search"
+    })
 
 
 if __name__ == '__main__':
