@@ -9,3 +9,6 @@ flask-cors
 
 tqdm
 gensim
+spacy
+tensorflow
+keras
