@@ -13,9 +13,10 @@ function App() {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    if(query.length > 2){
+    if(query.length > 0){
       setSubmitted(true)
       try{
+        console.log("API Called")
         axios.get('http://127.0.0.1:5000/search', {
           params: {
             "query": query,
@@ -73,18 +74,23 @@ function App() {
               </div>
               <div className="col-12 col-md-10">
                 <h1>{result.title}</h1>
-                <p dangerouslySetInnerHTML={{__html: result.body}}/>
-
-                <h5>Website:
-                  <span style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>
-                    {result.src}
-                  </span>
-                </h5>
-                <h5>Similarity Score:
-                  <span style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>
-                    {result.similarity_score}
-                  </span>
-                </h5>
+                <p dangerouslySetInnerHTML={{__html: result.body}}/> 
+              </div>
+              <div className="col-12">
+              <h4 style={{paddingLeft:"8px"}}>No. of answers: <span
+                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{(result.answers)}</span></h4>   
+              </div>
+              <div className="col-12">
+              <h4 style={{paddingLeft:"8px"}}>Source: <span
+                style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.src.replace('https:/','').replace('.com/','').replace('/','')}</span></h4> 
+              </div>
+              <div className="col-12">
+              <h4 style={{paddingLeft:"8px"}}>Date: <span
+                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{(result.date)}</span></h4>
+              </div>
+              <div className="col-12">
+              <h4 style={{paddingLeft:"8px"}}>Similarity Score: <span
+                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.similarity_score}</span></h4>
               </div>
             </div>
           </div>
