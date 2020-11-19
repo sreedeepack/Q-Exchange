@@ -13,7 +13,7 @@ function App() {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    if(query.length > 0){
+    if(query.length > 2){
       setSubmitted(true)
       try{
         axios.get('http://127.0.0.1:5000/search', {
@@ -65,13 +65,26 @@ function App() {
             <div className="row">
               <div className="col-12 col-md-2">
                 <h2 className="text-center">Votes</h2>
-              <h3 className="text-center">{result.votes}</h3>
+                <h3 className="text-center">{result.votes}</h3>
+
+                <h4 className="text-center"># of Answers</h4>
+                <h5 className="text-center">{result.answers}</h5>
+
               </div>
               <div className="col-12 col-md-10">
                 <h1>{result.title}</h1>
                 <p dangerouslySetInnerHTML={{__html: result.body}}/>
-                <h4>Similarity Score: <span
-                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.similarity_score}</span></h4>
+
+                <h5>Website:
+                  <span style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>
+                    {result.src}
+                  </span>
+                </h5>
+                <h5>Similarity Score:
+                  <span style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>
+                    {result.similarity_score}
+                  </span>
+                </h5>
               </div>
             </div>
           </div>
