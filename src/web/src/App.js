@@ -13,7 +13,7 @@ function App() {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    if(query.length > 0){
+    if(query.length > 2){
       setSubmitted(true)
       try{
         console.log("API Called")
@@ -68,7 +68,11 @@ function App() {
             <div className="row">
               <div className="col-12 col-md-2">
                 <h2 className="text-center">Votes</h2>
-              <h3 className="text-center">{result.votes}</h3>
+                <h3 className="text-center">{result.votes}</h3>
+
+                <h4 className="text-center"># of Answers</h4>
+                <h5 className="text-center">{result.answers}</h5>
+
               </div>
               <div className="col-12 col-md-10">
                 <h1>{result.title}</h1>

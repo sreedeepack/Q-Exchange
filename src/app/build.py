@@ -93,6 +93,11 @@ class BuildModel(object):
         # sentences = list(self.document_generator(self.file, type="word_list"))
         data = pd.DataFrame(self.document_generator(self.file, type="document"))
         data["text"] = data['title'] + " " + data['body'] + " " + data['content']
+
+        # Min_Max normalization of votes and num of answers
+        data['norm_votes'] = ( data.votes - data.votes.max() )/( data.votes.max() - data.votes.min() )
+        data['norm_ans'] = ( data.answers - data.answers.max() )/( data.answers.max() - data.answers.min() )
+
         sentences = [_text.split() for _text in np.array(data.text)]
         if os.path.exists("word2vec.model"):
             print("Loading word2vec model...")

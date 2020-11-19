@@ -41,8 +41,8 @@ class Query:
         Search top n results for given query
         """
         start = time.time()
-        preprocessor = self.model.preprocessor
-        dictionary = self.model.dictionary
+        # preprocessor = self.model.preprocessor
+        # dictionary = self.model.dictionary
 
         # same as size given in Word2Vec in build.py
         main_vec = np.zeros(300)
@@ -50,14 +50,14 @@ class Query:
         weight_sum = 0
 
         # preprocess question
-        text = preprocessor.clean_str(query)
+        text = self.model.preprocessor.clean_str(query)
         text_list = list(text.split())
 
         for word in text_list:
             if word in self.model.tfidf_words and word in self.model.w2v_words:
                 vect = self.model.w2v_model[word]
                 # compute tfidf
-                tf_idf = dictionary[word] * (text_list.count(word) / len(text_list))
+                tf_idf = self.model.dictionary[word] * (text_list.count(word) / len(text_list))
                 main_vec += (vect * tf_idf)
                 weight_sum += tf_idf
 
@@ -67,6 +67,10 @@ class Query:
         # find cosine similarity
         similarities = cosine_similarity(main_vec.reshape(1, -1), Y=self.model.tfidf_w2v_vectors_gensim,
                                          dense_output=True)
+
+        # Add upvote factor
+        similarities = similarities*(1 + 0.4*data.norm_votes + 0.1*data.norm_ans)
+
         # sort similarities
         sort = np.argsort(similarities[0])
         # sort indices in descending order
@@ -74,7 +78,7 @@ class Query:
         # find top n similar
         top_similarity_index = similarity_index[:top_n]
 
-        print(f'Top{top_n} cosine similarities are \t', similarities[0][top_similarity_index])
+        # print(f'Top{top_n} cosine similarities are \t', similarities[0][top_similarity_index])
 
         results = self.df.iloc[top_similarity_index]
 
@@ -84,9 +88,16 @@ class Query:
 
         # shortening body
         def extract_text(string, position=0):
-            if len(string) < 250:
-                return string
-            return string[position:position + 250].replace("\n", '...') + "..."
+            output = ""
+            for t in string[:250].split():
+                if t.lower() in search_string:
+                    output += " <b style='color: #464646'>"+str(t)+"</b>"
+                else:
+                    output += " "+str(t)
+            return output
+            # if len(string) < 250:
+            #     return string
+            # return string[position:position + 250].replace("\n", '...') + "..."
 
         results['body'] = results['body'].apply(lambda s: extract_text(s))
 
@@ -107,6 +118,8 @@ class Query:
                 prediction[i] = 0
         tags = self.tag_encoder.inverse_transform(np.array([prediction]))
         return tags
+
+
 
 
 if __name__ == "__main__":
