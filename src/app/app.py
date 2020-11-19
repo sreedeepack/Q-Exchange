@@ -23,8 +23,8 @@ def search():
 
     result = query_obj.search(inp_query, num_results)
     tags = list(query_obj.predict_tags(inp_query))
-    print(f"Query:{inp_query}")
-    print(f"Tags are {tags} and result=>\n{result}")
+    #print(f"Query:{inp_query}")
+    #print(f"Tags are {tags} and result=>\n{result}")
     return jsonify({'tags': tags, 'results': result})
 
 

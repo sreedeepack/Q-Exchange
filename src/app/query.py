@@ -69,7 +69,9 @@ class Query:
                                          dense_output=True)
 
         # Add upvote factor
-        similarities = similarities*(1 + 0.4*data.norm_votes + 0.1*data.norm_ans)
+        print(f"Similarities = {type(similarities)}")
+        print(f"Norm = {type(self.df.norm_votes)}")
+        similarities = similarities*(1 + 0.4*self.df.norm_votes.values + 0.1*self.df.norm_ans.values)
 
         # sort similarities
         sort = np.argsort(similarities[0])
@@ -87,11 +89,11 @@ class Query:
         results['similarity_score'] = similarity_score.values
 
         # shortening body
-        def extract_text(string, position=0):
+        def extract_text(string, query, position=0):
             output = ""
             for t in string[:250].split():
-                if t.lower() in search_string:
-                    output += " <b style='color: #464646'>"+str(t)+"</b>"
+                if t.lower() in query:
+                    output += " <b style='color: #464646; font-weight:1000;'>"+str(t)+"</b>"
                 else:
                     output += " "+str(t)
             return output
@@ -99,7 +101,7 @@ class Query:
             #     return string
             # return string[position:position + 250].replace("\n", '...') + "..."
 
-        results['body'] = results['body'].apply(lambda s: extract_text(s))
+        results['body'] = results['body'].apply(lambda s: extract_text(s, query))
 
         total_time = (time.time() - start)
         print(f'Time taken = {total_time} ms')
