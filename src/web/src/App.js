@@ -13,7 +13,7 @@ function App() {
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    if(query.length > 2){
+    if(query.length > 0){
       setSubmitted(true)
       try{
         console.log("API Called")
