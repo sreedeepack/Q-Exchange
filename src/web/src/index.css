@@ -1,18 +1,18 @@
 @font-face {
   font-family: 'Axiforma';
-  src: url('fonts/Axiforma Regular.otf'); 
+  src: url('fonts/Axiforma Regular.otf');
 }
 @font-face {
   font-family: 'Axiforma ExtraBold';
-  src: url('fonts/Axiforma ExtraBold.otf'); 
+  src: url('fonts/Axiforma ExtraBold.otf');
 }
 @font-face {
   font-family: 'Axiforma Bold';
-  src: url('fonts/Axiforma Bold.otf'); 
+  src: url('fonts/Axiforma Bold.otf');
 }
 @font-face {
   font-family: 'Axiforma Light';
-  src: url('fonts/Axiforma Light.otf'); 
+  src: url('fonts/Axiforma Light.otf');
 }
 
 body{
@@ -31,10 +31,18 @@ body{
   padding-top: 10px;
 }
 
-.btn{
-  border-radius: 10px;
-  font-family: 'Axiforma', sans-serif;
+.input-group > .form-control:not(:first-child) {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
 
+.btn {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  font-family: 'Axiforma', sans-serif;
 }
 
 .inputfield::placeholder{
@@ -200,7 +208,7 @@ body{
     margin-top: -120px !important;
     margin-bottom: 50px !important;
   }
-  
+
   .logo_white_bg{
     width: 80%;
     margin-top: 0px !important;

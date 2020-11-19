@@ -89,15 +89,18 @@ function App() {
               </div>
               <div className="col-12 col-md-10">
                 <h1>{result.title}</h1>
-                <p dangerouslySetInnerHTML={{__html: result.body}}/> 
+                <p dangerouslySetInnerHTML={{__html: result.body}}/>
               </div>
               <div className="col-12">
-              <h4 style={{paddingLeft:"8px"}}>No. of answers: <span
-                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{(result.answers)}</span></h4>   
+                <h4 style={{paddingLeft: "8px"}}>No. of answers: <span
+                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{(result.answers)}</span></h4>
               </div>
               <div className="col-12">
-              <h4 style={{paddingLeft:"8px"}}>Source: <span
-                style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.src.replace('https:/','').replace('.com/','').replace('/','')}</span></h4> 
+                <h4 style={{paddingLeft: "8px"}}>Source: <span
+                    style={{
+                      color: '#2F68B2',
+                      fontFamily: 'Axiforma Bold'
+                    }}>{result.src.replace('https:/', '').replace('.com/', '').replace('/', '')}</span></h4>
               </div>
               <div className="col-12">
               <h4 style={{paddingLeft:"8px"}}>Date: <span
@@ -121,38 +124,48 @@ function App() {
             <div class="form-group has-feedback" className="inputfieldcontainer">
               <h1 className="num_results_h1"
                   style={{color: submitted ? '#464646' : 'white', fontSize: "25px"}}> Q-EXCHANGE </h1>
-              <div class="input-group">
-              <input type="text" class="form-control inputfield" value={query} placeholder="Search Query"
-                     onChange={(e) => setQuery(e.target.value)}/>
 
-              {/* <button class="fas btn" style={{'display': submitted ? 'block' : 'none', fontFamily: 'Axiforma Bold'}} onClick={callAPI}> Search </button> */}
-              <div class="input-group-append">
-                <button class="btn btn-primary" style={{'display': submitted ? 'block' : 'none'}} onClick={callAPI} type="button">Search</button>
+              <div class="input-group">
+                <input type="text" className="form-control inputfield" value={query} placeholder="Search Query"
+                       style={{
+                         borderBottomRightRadius: submitted ? '0px' : '10px',
+                         borderTopRightRadius: submitted ? '0px' : '10px'
+                       }}
+                       onChange={(e) => setQuery(e.target.value)}/>
+                <div class="input-group-append">
+                  <button class="btn btn-primary" style={{'display': submitted ? 'block' : 'none'}} onClick={callAPI}
+                          type="button">Search
+                  </button>
+                </div>
               </div>
-              </div>
+
+              {/*<input type="text" className="form-control inputfield" value={query} placeholder="Search Query"*/}
+              {/*       onChange={(e) => setQuery(e.target.value)}/>*/}
+              {/*<i className="fas fa-search search_icon"/>*/}
 
               <div className="row" style={{marginTop: '10px'}}>
                 <div className="col-md-6">
-          </div>
-          <div className="col-12 col-md-6">
-            <div className="row">
-            <div className="col-9">
-              <h1 className="num_results_h1" style={{color: submitted? '#464646': 'white'}}>No. of results to return: </h1> 
-              </div>
-              <div className="col-2">
+                </div>
+                <div className="col-12 col-md-6">
+                  <div className="row">
+                    <div className="col-9">
+                      <h1 className="num_results_h1" style={{color: submitted ? '#464646' : 'white'}}>No. of results to
+                        return: </h1>
+                    </div>
+                    <div className="col-2">
               <input type="number" class="form-control inputfield inputfield2" value={num_results} onChange={(e) => setNum_results(e.target.value)}/>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        </div>
 
-        {renderTags()}
-        <br /><br />
-        {renderResults}
+            {renderTags()}
+            <br/><br/>
+            {renderResults}
           </Card.Body>
-      </Card>  
-      <br />
+        </Card>
+        <br/>
       <br />
       </div>
     </div>
