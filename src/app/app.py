@@ -8,7 +8,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-query_obj = Query("../../crawlers/stack/data/data.jsonl")
+query_obj = Query("data.jsonl")
 
 
 @app.route('/search')

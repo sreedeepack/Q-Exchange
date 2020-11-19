@@ -1,0 +1,8 @@
+.dockerignore
+Dockerfile
+*.cpy
+*.pkl
+*.h5
+*.model
+*.jsonl
+*.pickle

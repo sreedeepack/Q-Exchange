@@ -121,7 +121,7 @@ body{
   background-color: #2F68B2;
   margin-right: 10px;
   font-size: 12px;
-  padding: 10px 20px;
+  padding: 10px 15px;
   font-family: 'Axiforma';
   text-transform: uppercase;
   color: white;
@@ -143,10 +143,10 @@ body{
   margin-bottom: 20px;
 }
 
-.searchresult:hover{
+.searchresult:hover {
   text-decoration: none;
   color: #464646;
-  background-color: #FFFAF5 !important;
+  background-color: #e8f7ff !important;
 }
 
 .searchresult h1{

@@ -71,7 +71,7 @@ class Query:
         # Add upvote factor
         print(f"Similarities = {type(similarities)}")
         print(f"Norm = {type(self.df.norm_votes)}")
-        similarities = similarities*(1 + 0.4*self.df.norm_votes.values + 0.1*self.df.norm_ans.values)
+        similarities = similarities * (1 + 0.2 * self.df.norm_votes.values + 0.05 * self.df.norm_ans.values)
 
         # sort similarities
         sort = np.argsort(similarities[0])

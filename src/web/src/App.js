@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
 import axios from 'axios';
-import {Badge, Card} from 'react-bootstrap';
+import {Button, Card} from 'react-bootstrap';
 
 function App() {
 
@@ -17,7 +17,7 @@ function App() {
       setSubmitted(true)
       // try{
 
-      //   axios.get('http://127.0.0.1:5000/search', {
+      //   axios.get('http://0.0.0.0:5000/search', {
       //     params: {
       //       "query": query,
       //       "num_results": num_results
@@ -45,7 +45,7 @@ function App() {
   const callAPI = () => {
     try{
       console.log("API Called")
-      axios.get('http://127.0.0.1:5000/search', {
+      axios.get('http://0.0.0.0:5000/search', {
         params: {
           "query": query,
           "num_results": num_results
@@ -62,8 +62,11 @@ function App() {
   }
 
   var Tags = tags.map((tag,i) => {
-    return(
-      <Badge className="tags">{tag}</Badge>
+    return (
+        <Button className="tags" onClick={() => {
+          var text = (query.valueOf() + " " + tag);
+          setQuery(text);
+        }}>{tag}</Button>
     );
   });
 
@@ -71,7 +74,7 @@ function App() {
     if(tags.length > 0){
       return(
         <div className="inputfieldcontainer">
-          <h1 className="predicted_tags_h1">Predicted Tags</h1>
+          <h1 className="predicted_tags_h1">Suggested Tags</h1>
           {Tags}
         </div>
       );
@@ -96,20 +99,21 @@ function App() {
                     style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{(result.answers)}</span></h4>
               </div>
               <div className="col-12">
-                <h4 style={{paddingLeft: "8px"}}>Source: <span
+                <h4 style={{paddingLeft: "8px"}}>Date: <span
+                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{(result.date)}</span></h4>
+              </div>
+              <div className="col-12">
+                <h4 style={{paddingLeft: "8px"}}>Similarity Score: <span
+                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.similarity_score}</span></h4>
+              </div>
+              <div className="col-12">
+                <h4 style={{paddingLeft: "8px"}}><span
                     style={{
                       color: '#2F68B2',
                       fontFamily: 'Axiforma Bold'
                     }}>{result.src.replace('https:/', '').replace('.com/', '').replace('/', '')}</span></h4>
               </div>
-              <div className="col-12">
-              <h4 style={{paddingLeft:"8px"}}>Date: <span
-                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{(result.date)}</span></h4>
-              </div>
-              <div className="col-12">
-              <h4 style={{paddingLeft:"8px"}}>Similarity Score: <span
-                    style={{color: '#2F68B2', fontFamily: 'Axiforma Bold'}}>{result.similarity_score}</span></h4>
-              </div>
+
             </div>
           </div>
         </a>
@@ -126,16 +130,16 @@ function App() {
                   style={{color: submitted ? '#464646' : 'white', fontSize: "25px"}}> Q-EXCHANGE </h1>
 
               <div class="input-group">
-                <input type="text" className="form-control inputfield" value={query} placeholder="Search Query"
+                <input id="query-box" type="text" className="form-control inputfield" value={query}
+                       placeholder="Search Query"
                        style={{
                          borderBottomRightRadius: submitted ? '0px' : '10px',
                          borderTopRightRadius: submitted ? '0px' : '10px'
                        }}
                        onChange={(e) => setQuery(e.target.value)}/>
                 <div class="input-group-append">
-                  <button class="btn btn-primary" style={{'display': submitted ? 'block' : 'none'}} onClick={callAPI}
-                          type="button">Search
-                  </button>
+                  <Button className="inputfield tags" style={{'display': submitted ? 'block' : 'none'}}
+                          onClick={callAPI} type="submit">Search</Button>
                 </div>
               </div>
 
@@ -153,7 +157,8 @@ function App() {
                         return: </h1>
                     </div>
                     <div className="col-2">
-              <input type="number" class="form-control inputfield inputfield2" value={num_results} onChange={(e) => setNum_results(e.target.value)}/>
+
+                    <input type="number" class="form-control inputfield inputfield2" value={num_results} onChange={(e) => setNum_results(e.target.value)}/>
                     </div>
                   </div>
                 </div>
