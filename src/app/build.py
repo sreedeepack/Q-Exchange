@@ -52,6 +52,8 @@ class BuildModel(object):
                     'answers': obj['answers'],
                     'src': obj['src'],
                     'tags': ", ".join(obj['tags']),
+                    # only if answers are there in the file
+                    'content': preprocessor.preprocess_text(obj['content'], use_stopwords)
                 }
                 if type == "document":
                     yield item
@@ -86,16 +88,18 @@ class BuildModel(object):
         self.dictionary = dict(zip(tfidf.get_feature_names(), list(tfidf.idf_)))
 
     def gensim_vec(self):
-        print("Generating word2vec model...")
+        print("Checking word2vec model...")
 
         # sentences = list(self.document_generator(self.file, type="word_list"))
         data = pd.DataFrame(self.document_generator(self.file, type="document"))
-        data["text"] = data['title'] + " " + data['body']
+        data["text"] = data['title'] + " " + data['body'] + " " + data['content']
         sentences = [_text.split() for _text in np.array(data.text)]
         if os.path.exists("word2vec.model"):
+            print("Loading word2vec model...")
+
             w2v_model = Word2Vec.load("word2vec.model")
         else:
-
+            print("Generating word2vec model...")
             w2v_model = Word2Vec(size=300, window=7, min_count=10, workers=-1)
             # w2v_model = Word2Vec(sentences=sentences, size=300, window=7, min_count=10, workers=-1)
 
@@ -140,7 +144,7 @@ class BuildModel(object):
         self.data = data
 
     def tag_encoder(self):
-        self.data.tags = self.data.tags.apply(lambda x: x.split('|'))
+        self.data.tags = self.data.tags.apply(lambda x: x.split(','))
         tag_freq_dict = {}
         for tags in self.data.tags:
             for tag in tags:

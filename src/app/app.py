@@ -8,7 +8,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-query_obj = Query()
+query_obj = Query("../../crawlers/stack/data/data.jsonl")
 
 
 @app.route('/search')
@@ -23,7 +23,8 @@ def search():
 
     result = query_obj.search(inp_query, num_results)
     tags = list(query_obj.predict_tags(inp_query))
-
+    print(f"Query:{inp_query}")
+    print(f"Tags are {tags} and result=>\n{result}")
     return jsonify({'tags': tags, 'results': result})
 
 
@@ -36,4 +37,4 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

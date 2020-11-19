@@ -17,12 +17,13 @@ class Query:
     def __init__(self, file="../../crawlers/stack/data/solr.jsonl"):
         self.model = BuildModel(file)
         self.model.build()
-        self.df = pd.DataFrame(self.model.document_generator(file, type="document"))
+        self.df = self.model.data
+        # self.df = pd.DataFrame(self.model.document_generator(file, type="document"))
         self.tag_encoder = self.model.tag_encoder()
 
         with open('tokenizer.pickle', 'rb') as handle:
             self.tokenizer = pickle.load(handle)
-
+        #
         self.tag_model = load_model('tag_predictor.h5')
 
     def search_index(self, query):
@@ -109,7 +110,7 @@ class Query:
 
 
 if __name__ == "__main__":
-    q = Query("../../crawlers/stack/data/solr.jsonl")
+    q = Query("../../crawlers/stack/data/data.jsonl")
     inp = ""
     while True:
         inp = input("Enter query...or type 'exit':\n")

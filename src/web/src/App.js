@@ -23,7 +23,7 @@ function App() {
           }
         })
         .then((response) => {
-            // setTags(response.data.tags[0])
+            setTags(response.data.tags[0])
             setSearchResults(response.data.results)
         });
       }
