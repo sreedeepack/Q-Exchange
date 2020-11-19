@@ -37,8 +37,6 @@ function App() {
         setSubmitted(false)
         setSearchResults([])
         setTags([])
-        var tmpNumRes = num_results
-        setNum_results(tmpNumRes)
       }, 700);
 
     }
