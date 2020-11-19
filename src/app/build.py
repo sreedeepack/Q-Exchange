@@ -122,6 +122,7 @@ class BuildModel(object):
         self.get_tfidf()
 
         print("Generating tfidf...")
+
         if os.path.exists("tfidf.pkl"):
             pkl_file = open("tfidf.pkl", "rb")
             self.tfidf_w2v_vectors_gensim = pickle.load(pkl_file)

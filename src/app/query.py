@@ -93,7 +93,7 @@ class Query:
             output = ""
             for t in string[:250].split():
                 if t.lower() in query:
-                    output += " <b style='color: #464646; font-weight:1000;'>"+str(t)+"</b>"
+                    output += " <b style='color: #2f68b2; font-weight:50px;'>"+str(t)+"</b>"
                 else:
                     output += " "+str(t)
             return output

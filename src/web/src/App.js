@@ -16,7 +16,7 @@ function App() {
     if(query.length > 0){
       setSubmitted(true)
       try{
-        console.log("API Called")
+
         axios.get('http://127.0.0.1:5000/search', {
           params: {
             "query": query,
@@ -67,10 +67,6 @@ function App() {
               <div className="col-12 col-md-2">
                 <h2 className="text-center">Votes</h2>
                 <h3 className="text-center">{result.votes}</h3>
-
-                <h4 className="text-center"># of Answers</h4>
-                <h5 className="text-center">{result.answers}</h5>
-
               </div>
               <div className="col-12 col-md-10">
                 <h1>{result.title}</h1>
