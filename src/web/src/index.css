@@ -31,6 +31,12 @@ body{
   padding-top: 10px;
 }
 
+.btn{
+  border-radius: 10px;
+  font-family: 'Axiforma', sans-serif;
+
+}
+
 .inputfield::placeholder{
   font-family: 'Axiforma', sans-serif;
   color: #BFC3C7;

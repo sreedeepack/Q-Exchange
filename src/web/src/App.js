@@ -15,22 +15,22 @@ function App() {
   useEffect(() => {
     if(query.length > 0){
       setSubmitted(true)
-      try{
+      // try{
 
-        axios.get('http://127.0.0.1:5000/search', {
-          params: {
-            "query": query,
-            "num_results": num_results
-          }
-        })
-        .then((response) => {
-            setTags(response.data.tags[0])
-            setSearchResults(response.data.results)
-        });
-      }
-      catch(e){
-        console.log('Error: ' + e)
-      }
+      //   axios.get('http://127.0.0.1:5000/search', {
+      //     params: {
+      //       "query": query,
+      //       "num_results": num_results
+      //     }
+      //   })
+      //   .then((response) => {
+      //       setTags(response.data.tags[0])
+      //       setSearchResults(response.data.results)
+      //   });
+      // }
+      // catch(e){
+      //   console.log('Error: ' + e)
+      // }
     }
     else{
       setTimeout(() => {
@@ -41,6 +41,25 @@ function App() {
 
     }
   }, [query, num_results])
+
+  const callAPI = () => {
+    try{
+      console.log("API Called")
+      axios.get('http://127.0.0.1:5000/search', {
+        params: {
+          "query": query,
+          "num_results": num_results
+        }
+      })
+      .then((response) => {
+          setTags(response.data.tags[0])
+          setSearchResults(response.data.results)
+      });
+    }
+    catch(e){
+      console.log('Error: ' + e)
+    }
+  }
 
   var Tags = tags.map((tag,i) => {
     return(
@@ -102,10 +121,15 @@ function App() {
             <div class="form-group has-feedback" className="inputfieldcontainer">
               <h1 className="num_results_h1"
                   style={{color: submitted ? '#464646' : 'white', fontSize: "25px"}}> Q-EXCHANGE </h1>
-
+              <div class="input-group">
               <input type="text" class="form-control inputfield" value={query} placeholder="Search Query"
                      onChange={(e) => setQuery(e.target.value)}/>
-              <i class="fas fa-search search_icon"/>
+
+              {/* <button class="fas btn" style={{'display': submitted ? 'block' : 'none', fontFamily: 'Axiforma Bold'}} onClick={callAPI}> Search </button> */}
+              <div class="input-group-append">
+                <button class="btn btn-primary" style={{'display': submitted ? 'block' : 'none'}} onClick={callAPI} type="button">Search</button>
+              </div>
+              </div>
 
               <div className="row" style={{marginTop: '10px'}}>
                 <div className="col-md-6">
