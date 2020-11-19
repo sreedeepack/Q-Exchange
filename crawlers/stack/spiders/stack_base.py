@@ -12,7 +12,7 @@ class StackSpider(Spider):
     allowed_domains = ["stackoverflow.com", "stackexchange.com", "askubuntu.com"]
     # jsonlines writer - for persisting data as files - use instead of pipeline writer
     custom_settings = {
-        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jl',
+        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jsonl',
         'FEED_FORMAT': 'jsonlines',
         'FEED_EXPORTERS': {
             'jsonlines': 'scrapy.exporters.JsonLinesItemExporter',

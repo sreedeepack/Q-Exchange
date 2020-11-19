@@ -9,7 +9,7 @@ base_url = ("http://", ".com/questions?pagesize=50&sort=frequent")
 class SOSpider(StackSpider):
     name = "stackoverflow"
     custom_settings = {
-        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jl',
+        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jsonl',
     }
     start_urls = [
         f"{base_url[0]}stackoverflow{base_url[1]}",
@@ -24,7 +24,7 @@ class SOSpider(StackSpider):
 class UnixSpider(StackSpider):
     name = "unix"
     custom_settings = {
-        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jl',
+        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jsonl',
     }
     start_urls = [
         f"{base_url[0]}askubuntu{base_url[1]}",
@@ -39,7 +39,7 @@ class UnixSpider(StackSpider):
 class OtherSESpider(StackSpider):
     name = "stack-other"
     custom_settings = {
-        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jl',
+        'FEED_URI': f'temp/{name}_' + str(datetime.today()) + '.jsonl',
     }
     start_urls = [
         f"{base_url[0]}math.stackexchange{base_url[1]}",

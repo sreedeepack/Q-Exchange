@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+
+  app:
+    container_name: app
+    restart: always
+    build: ./app
+    ports:
+      - "5000:5000"
+    command: gunicorn -w 1 -b 0.0.0.0:5000 app:app --timeout 300
+  web:
+    container_name: web
+    restart: always
+    build: ./web
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+

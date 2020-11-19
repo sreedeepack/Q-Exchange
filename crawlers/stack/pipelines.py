@@ -22,7 +22,7 @@ class StackPipeline:
 class JsonWriterPipeline:
 
     def open_spider(self, spider):
-        self.file = open(f'{uuid4()}_items.jl', "a")
+        self.file = open(f'{uuid4()}_items.jsonl', "a")
 
     def close_spider(self, spider):
         self.file.close()

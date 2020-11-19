@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 # outputs
-*.json
 *.jl
 
 # IDEs
@@ -137,3 +136,7 @@ dmypy.json
 .vscode/settings.json
 /.vscode/
 .idea/
+
+# React and Node
+node_modules/
+package-lock.json
