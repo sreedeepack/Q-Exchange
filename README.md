@@ -7,6 +7,18 @@ A Search Engine Aggregator of various communities & forums like Stack Overflow, 
 - Useful for users to visualise what various communities are talking about a trend.
 
 ## To Run
+
+## Application
+
+- Install docker and docker-compse
+- run ```./run_docker.sh```
+
+### UI
+
+![alt text](https://i.imgur.com/dkavw8B.gif)
+
+
+## Crawling
 - Set up python (python3) venv and install dependencies in requirements.txt
 ```
 python3 -m venv ./venv 
@@ -44,6 +56,7 @@ Then, you can stop the spider safely at any time (by pressing Ctrl-C or sending 
 
 ### Searching
 
+In src/app 
 Run ```query.py```
     
     $ chmod +x query.py
@@ -54,3 +67,4 @@ Run ```query.py```
 ![alt text](screenshots/add_docs_from_terminal.png?raw=true)
 ![alt text](screenshots/add_docs_from_ui.png?raw=true)
 ![alt text](screenshots/query_index.png?raw=true)
+
